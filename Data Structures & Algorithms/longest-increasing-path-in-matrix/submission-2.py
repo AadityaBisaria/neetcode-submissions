@@ -1,0 +1,25 @@
+class Solution:
+    def longestIncreasingPath(self, matrix: List[List[int]]) -> int:
+        
+        ROW,COL=len(matrix),len(matrix[0])
+        dp={}
+        
+        neighbours=[(1,0),(0,1),(-1,0),(0,-1)]
+        def dfs(i,j,value):
+            if i<0 or i==ROW or j<0 or j==COL or matrix[i][j] <= value:
+                return 0
+            if (i,j) in dp:
+                return dp[(i,j)]
+            
+            res=1
+            if value<matrix[i][j]:
+                for nei,neij in neighbours:
+                    res=max(res,1+dfs(i+nei,j+neij,matrix[i][j]))
+            
+            dp[(i,j)]=res
+            return dp[(i,j)]
+    
+        for i in range(ROW):
+            for j in range(COL):
+                dfs(i,j,-1)
+        return max(dp.values())
